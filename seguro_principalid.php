@@ -789,9 +789,7 @@ if(isset($_GET['mensaje'])) {
       
 <tr>
 <td style='border: none; text-align:left;  font-size:10px;'>Facilidad
-<!-- Campo de facilidad integrado al formulario principal -->
-<input type="hidden" name="facilidad" id="facilidadInput" value="<?php echo $facilidad; ?>">
-<input type="checkbox" name="facilidad_checkbox" id="facilidad" <?php echo $checked2; ?> onclick="toggleFacilidad(this)">
+<input type="checkbox" name="facilidad" id="facilidad" <?php echo $checked2; ?> value="Si" onclick="toggleFacilidad(this)"> 
 </td>
 
 <td style='border: none; text-align:left;  font-size:10px;'>Vigencia de Cotización: <input style="width:98%;  text-align:left;" type="date" name="vigencia" id="vigencia" value="<?php echo isset($vigencia) ? $vigencia : ''; ?>">
@@ -883,27 +881,27 @@ if(isset($_GET['mensaje'])) {
    
    
    <tr>
-    <!-- Botones de cobertura que solo actualizan el campo oculto -->
+    <!-- Botones de cobertura que actualizan tanto el campo oculto como los valores cov1-cov4 -->
     <td id="campo-cov1" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo $cobertura === 'Rotura de maquinaria' ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
+        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo ($cobertura === 'Rotura de maquinaria' || $cov1 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
         <label for="cov1">Rotura de maquinaria</label>
     </td>
     
     <td id="campo-cov2" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo $cobertura === 'Equipo Electrónico' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
+        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo ($cobertura === 'Equipo Electrónico' || $cov2 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
         <label for="cov2">Equipo Electrónico</label>
     </td>
     
     <td id="campo-cov3" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo $cobertura === 'Contenidos' ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
+        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo ($cobertura === 'Contenidos' || $cov3 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
         <label for="cov3">Contenidos</label>
     </td>
     
     <td id="campo-cov4" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo $cobertura === 'Equipo de Contratistas' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
+        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo ($cobertura === 'Equipo de Contratistas' || $cov4 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
         <label for="cov4">Equipo de Contratistas</label>
     </td>
-   </tr>
+</tr>
    
    
    
@@ -1068,6 +1066,11 @@ if ($result) {
 <input type="hidden" name="deddma" id="deddma">
 <input type="hidden" name="dedrta" id="dedrta">
 <input type="hidden" name="adapmonto" id="adapmonto"> 
+
+<!-- AGREGAR CAMPOS FALTANTES EN EL SEGUNDO FORMULARIO -->
+<input type="hidden" name="facprima" id="facprima2" value="<?php echo isset($facprima) ? $facprima : '12'; ?>">
+<input type="hidden" name="cobertura" id="cobertura2" value="<?php echo isset($cobertura) ? $cobertura : ''; ?>">
+<input type="hidden" name="facilidad" id="facilidadInput2" value="<?php echo isset($facilidad) ? $facilidad : 'No'; ?>">
   </table>
   
  
@@ -1103,9 +1106,7 @@ if ($result) {
 <tr>
 
 <td style='border: none; text-align:left;  font-size:10px;'>Facilidad
-<!-- Campo de facilidad integrado al formulario principal -->
-<input type="hidden" name="facilidad" id="facilidadInput2" value="<?php echo $facilidad; ?>">
-<input type="checkbox" name="facilidad_checkbox" id="facilidad2" <?php echo $checked2; ?> onclick="toggleFacilidad2(this)">
+<input type="checkbox" name="facilidad" id="facilidad" <?php echo $checked2; ?> value="Si" onclick="toggleFacilidad(this)"> 
 </td>
 
 <td style='border: none; text-align:left;  font-size:10px;'>Vigencia de Cotización: <input style="width:98%;  text-align:left;" type="date" name="vigencia" id="vigencia" value="<?php echo isset($vigencia) ? $vigencia : ''; ?>">
@@ -1116,45 +1117,30 @@ if ($result) {
 <tr>
 
 <td style='border: none; text-align:left;  font-size:10px;'>Prima : <input style="width:98%;  text-align:left;" type="text" name="prima" id="prima" value="<?php echo isset($prima) ? number_format($prima, 2, '.', ',') : ''; ?>" class="format-number">
-<input style="width:98%;  text-align:left;" type="hidden" step="0.01" name="tasaf" id="tasaf" value="<?php echo isset($tasaf) ? $tasaf : 0; ?>">
-</td>
 
-<td id="campo-gtosexp" style='border: none; text-align:left; font-size:10px; <?php echo $facilidad === "Si" ? "display: none;" : ""; ?>'>
-    Gastos de expedición : 
-    <input style="width:98%; text-align:left;" type="text" name="gtosexp" id="gtosexp" 
-           value="<?php echo isset($gtosexp) ? number_format($gtosexp, 2, '.', ',') : ''; ?>" class="format-number">
 </td>
+<td style='border: none; text-align:left;  font-size:10px;'>Tasa de Financiamiento : <input style="width:98%;  text-align:left;" type="text" name="tasaf" id="tasaf" value="<?php echo isset($tasaf) ? number_format($tasaf, 2, '.', ',') : ''; ?>" class="format-number">
+
+</td>
+<td style='border: none; text-align:left;  font-size:10px;'>Gastos de expedición : <input style="width:98%;  text-align:left;" type="text" name="gtosexp" id="gtosexp" value="<?php echo isset($gtosexp) ? number_format($gtosexp, 2, '.', ',') : ''; ?>" class="format-number"></td>
 
 <td style='border: none; text-align:left;  font-size:10px;'>IVA : <input style="width:98%;  text-align:left;" type="text" step="0.01" name="iva" id="iva" value="<?php echo isset($iva) ? $iva : ''; ?>" class="format-number"></td>
 
 
 <td style='border: none; text-align:left;  font-size:10px;'>Prima Total : <input type="hidden" name="monto" id="monto" value="<?php echo isset($monto) ? $monto : ''; ?>">
-                                                                          <input style="width:98%;  text-align:left;" type="text" name="montot" id="montot" value="<?php echo isset($montot) ? $montot : ''; ?>" class="format-number"></td>
+                                                                          <input style="width:98%;  text-align:left;" type="text" name="montot" id="montot" value="<?php echo isset($montot) ? number_format($montot, 2, '.', ',') : ''; ?>" class="format-number"></td>
 
 
    </tr>
    
       
 <tr>
-<?php
-if ($permiso == "R1eSgoS" || $permiso == "SegUros" ||  $permiso == "DiRgEn" || $permiso == "D3saRrOllo"){
-?>
 
-<td id="campo-facprima-2" style='border: none; text-align:left; font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
+<td id="campo-facprima-1" style='border: none; text-align:left; font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
     Factor Prima: 
-    <input style="width:98%; text-align:left;" type="text" name="facprima_visible" id="facprima_visible_2" 
+    <input style="width:98%; text-align:left;" type="text" name="facprima_visible" id="facprima_visible_1" 
            value="<?php echo isset($facprima_display) ? $facprima_display : (isset($facprima) ? $facprima : '12'); ?>" onchange="updateFactorPrima(this)">
 </td>
-
-<?php } else { ?>
-
-<td id="campo-facprima-3" style='border: none; text-align:left; font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-    Factor Prima: 
-    <input style="width:98%; text-align:left;background:#d2d2d2;" type="text" name="facprima_visible" id="facprima_visible_3" 
-           value="<?php echo isset($facprima_display) ? $facprima_display : (isset($facprima) ? $facprima : '12'); ?>" onchange="updateFactorPrima(this)" readonly>
-</td>
-
-<?php } ?>
 
 <td style='border: none; text-align:left;  font-size:10px;'>Plazo de arrendamiento meses: <input style="width:98%;  text-align:left;" type="number" step="0.01" name="plazo" id="plazo" value="<?php echo isset($plazo) ? $plazo : ''; ?>"  readonly>
 
@@ -1178,14 +1164,14 @@ if ($permiso == "R1eSgoS" || $permiso == "SegUros" ||  $permiso == "DiRgEn" || $
 
 <tr>
 
-<td style='border: none; text-align:left;  font-size:10px;'>Seguro financiado: <select style="width:98%;" name="segfinanciado" id="segfinanciado">
-  <option value="No" <?php echo (isset($segfinanciado) && $segfinanciado == 'No') ? 'selected' : ''; ?>>No</option>
-  <option value="Si" <?php echo (isset($segfinanciado) && $segfinanciado == 'Si') ? 'selected' : ''; ?>>Sí</option>
+<td style='border: none; text-align:left;  font-size:10px;'>Seguro financiado: <select style="width:98%;" name="segfinanciado" id="segfinanciado" class="no-mayusculas">
+  <option value="No" <?php echo (isset($financiado) && $financiado == 'No') ? 'selected' : ''; ?>>No</option>
+  <option value="Si" <?php echo (isset($financiado) && $financiado == 'Si') ? 'selected' : ''; ?>>Sí</option>
 </select>
 </td>
 </td>
 
-<td style='border: none; text-align:left;  font-size:10px;'>Tipo de financiamiento :
+<td style='border: none; text-align:left;  font-size:10px;'>Tipo de financiamiento : 
 <select name="tiposeg" id="tiposeg" style="width:98%;" required>
     <option value="Seguro Financiado Anual" <?= $tiposeguro == 'Seguro Financiado Anual' ? 'selected' : '' ?>>Seguro Financiado Anual</option>
     <option value="Seguro de Contado Anual" <?= $tiposeguro == 'Seguro de Contado Anual' ? 'selected' : '' ?>>Seguro de Contado Anual</option>
@@ -1193,44 +1179,46 @@ if ($permiso == "R1eSgoS" || $permiso == "SegUros" ||  $permiso == "DiRgEn" || $
     <option value="Seguro Financiado Multianual" <?= $tiposeguro == 'Seguro Financiado Multianual' ? 'selected' : '' ?>>Seguro Financiado Multianual</option>
     <option value="Seguro a cuenta del Cliente" <?= $tiposeguro == 'Seguro a cuenta del Cliente' ? 'selected' : '' ?>>Seguro a cuenta del Cliente</option>
 </select> 
-<input type="hidden" name="tiposeguro" id="tiposeguro" value="<?php echo isset($tiposeguro) ? $tiposeguro : '0'; ?>" readonly>    
+                                                                                     <input type="hidden" name="tiposeguro" id="tiposeguro" value="<?php echo isset($tiposeguro) ? $tiposeguro : '0'; ?>" readonly>    
 </td>
-<!-- CORRECCIÓN: Cambiar type="number" por type="text" y agregar class="format-number" -->
+<!-- ✅ CORRECCIÓN 2: Cambiar type="number" por type="text" y agregar class="format-number" -->
 <td style='border: none; text-align:left;  font-size:10px;'>Factor de Financiamiento: <input style="width:98%;  text-align:left;" type="text" name="factor" id="factor"  value="<?php echo isset($factor) ? $factor : 1.2; ?>" class="format-number"></td>
 
-<td style='border: none; text-align:left;  font-size:10px;'>Monto Mensual a Pagar : <input style="width:98%;  text-align:left;" type="text" name="segurom" id="segurom" value="<?php echo isset($segurom) ? $segurom : 0; ?>" class="format-number"></td>
+<td style='border: none; text-align:left;  font-size:10px;'>Monto Mensual a Pagar : <input style="width:98%;  text-align:left;" type="text" name="segurom" id="segurom" value="<?php echo isset($segurom) ? $segurom : 0; ?>" readonly></td>
 
-<td style='border: none; text-align:left;  font-size:10px;'><input style="width:98%;  text-align:left;" type="hidden" step="0.01" name="seguromiva" id="seguromiva"></td>
+<td style='border: none; text-align:left;  font-size:10px;'>Monto Mensual a Pagar c/IVA : <input style="width:98%;  text-align:left;" type="text" name="seguromiva" id="seguromiva" readonly></td>
 
 
 
    </tr>       
-   <tr>
-       
-       <tr>
+   
 
-    <!-- Botones de cobertura que solo actualizan el campo oculto -->
+   
+   
+   
+   
+   <tr>
+    <!-- Botones de cobertura que actualizan tanto el campo oculto como los valores cov1-cov4 -->
     <td id="campo-cov1" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov1_2" value="Rotura de maquinaria" <?php echo $cobertura === 'Rotura de maquinaria' ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
-        <label for="cov1_2">Rotura de maquinaria</label>
+        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo ($cobertura === 'Rotura de maquinaria' || $cov1 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
+        <label for="cov1">Rotura de maquinaria</label>
     </td>
     
     <td id="campo-cov2" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov2_2" value="Equipo Electrónico" <?php echo $cobertura === 'Equipo Electrónico' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
-        <label for="cov2_2">Equipo Electrónico</label>
+        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo ($cobertura === 'Equipo Electrónico' || $cov2 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
+        <label for="cov2">Equipo Electrónico</label>
     </td>
     
     <td id="campo-cov3" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov3_2" value="Contenidos" <?php echo $cobertura === 'Contenidos' ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
-        <label for="cov3_2">Contenidos</label>
+        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo ($cobertura === 'Contenidos' || $cov3 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
+        <label for="cov3">Contenidos</label>
     </td>
     
     <td id="campo-cov4" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov4_2" value="Equipo de Contratistas" <?php echo $cobertura === 'Equipo de Contratistas' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
-        <label for="cov4_2">Equipo de Contratistas</label>
+        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo ($cobertura === 'Equipo de Contratistas' || $cov4 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
+        <label for="cov4">Equipo de Contratistas</label>
     </td>
-       
-   </tr>
+</tr>
    
    
    
@@ -1309,9 +1297,10 @@ if ($result) {
 
 
     <td style="border: none; text-align:left; font-size:10px;">
-                Fecha de pago de póliza
-                <input style="width:98%; text-align:left;" type="date" name="fechapoliza" value="<?php echo isset($fechapoliza) ? $fechapoliza : ''; ?>">
-            </td>
+    Fecha de pago de póliza
+    <input style="width:98%; text-align:left;" type="date" name="fechapoliza" value="<?php echo isset($fechapoliza) ? $fechapoliza : ''; ?>">
+</td>
+
 </tr>
 
 <tr>
@@ -1324,37 +1313,11 @@ if ($result) {
                 <input style="width:98%; text-align:left;" type="date" name="fechav" id="fechav" value="<?php echo isset($fechavencimiento) ? $fechavencimiento : ''; ?>">
             </td>
             <td style="border: none; text-align:left; font-size:10px;">
-    Duración del Seguro en meses
-    <?php 
-    $duracion_valor = '';
-    $duracion_mostrar = '';
-    
-    // Intentar obtener el valor de $policy si existe
-    if (isset($policy['Duracion']) && !empty($policy['Duracion'])) {
-        $duracion_mostrar = $policy['Duracion']; // Para mostrar tal cual
-    } 
-    // Si no, intentar con la variable $duracion
-    else if (isset($duracion) && !empty($duracion)) {
-        $duracion_mostrar = $duracion; // Para mostrar
-    }
-    
-    // Convertir "mes" o "meses" a mayúsculas
-    $duracion_mostrar = preg_replace('/\bmes\b/i', 'MES', $duracion_mostrar);
-    $duracion_mostrar = preg_replace('/\bmeses\b/i', 'MESES', $duracion_mostrar);
-    
-    // Preparar el valor numérico para cálculos
-    if (!empty($duracion_mostrar)) {
-        if (preg_match('/(\d+)\s*(?:AÑO|año|ANO|ano)/i', $duracion_mostrar, $matches)) {
-            $duracion_valor = intval($matches[1]) * 12; // Convertir años a meses
-        } else {
-            $duracion_valor = preg_replace('/[^0-9]/', '', $duracion_mostrar);
-        }
-    }
-    ?>
-    <input style="width:98%; text-align:left;" type="text" name="duracion_mostrar" 
-           value="<?php echo htmlspecialchars($duracion_mostrar); ?>">
-    <input type="hidden" name="duracion" id="duracion" value="<?php echo $duracion_valor; ?>">
+    Duración del Seguro
+    <input style="width:98%; text-align:left;" type="text" name="duracion" id="duracion" readonly value="">
 </td>
+
+
             <td style="border: none; text-align:left; font-size:10px;">
                 Mes de Vencimiento 
                 <input style="width:98%; text-align:left;" type="text" name="mesv" value="<?php echo isset($mesv) ? $mesv : ''; ?>" readonly>
@@ -1402,85 +1365,127 @@ if ($result) {
 </table>
 
 <!-- Script para manejar los cambios de facilidad y coberturas -->
+
+
 <script>
-// Función para manejar el cambio del checkbox de facilidad
-function toggleFacilidad(checkbox) {
-    // Actualizar el valor en el input hidden
-    document.getElementById('facilidadInput').value = checkbox.checked ? 'Si' : 'No';
+// Reemplazar las funciones actuales de facilidad con las nuevas
+function toggleCampos() {
+    var checkbox = document.getElementById('facilidad');
+    var campoGtosexp = document.getElementById('campo-gtosexp');
     
-    // Sincronizar el segundo checkbox si existe
-    var facilidad2 = document.getElementById('facilidad2');
-    if (facilidad2) {
-        facilidad2.checked = checkbox.checked;
-        document.getElementById('facilidadInput2').value = checkbox.checked ? 'Si' : 'No';
-    }
+    var campoUdi = document.getElementById('campo-udi');
+    var campoUdi2 = document.getElementById('campo-udi2');
+    var campoFacprima = document.querySelectorAll('[id^="campo-facprima-"]');
+    var primaInput = document.getElementById('prima');
     
-    // Mostrar/ocultar campos inmediatamente según el nuevo estado
-    toggleCampos();
-    
-    // NO enviar el formulario automáticamente - esperar a que el usuario presione "Guardar"
-    console.log('Facilidad cambiada a:', checkbox.checked ? 'Si' : 'No');
-}
+    var campoCov1 = document.getElementById('campo-cov1');
+    var campoCov2 = document.getElementById('campo-cov2');
+    var campoCov3 = document.getElementById('campo-cov3');
+    var campoCov4 = document.getElementById('campo-cov4');
 
-// Función para manejar el segundo checkbox de facilidad
-function toggleFacilidad2(checkbox) {
-    // Actualizar el valor en el input hidden
-    document.getElementById('facilidadInput2').value = checkbox.checked ? 'Si' : 'No';
-    
-    // Sincronizar el primer checkbox
-    var facilidad1 = document.getElementById('facilidad');
-    if (facilidad1) {
-        facilidad1.checked = checkbox.checked;
-        document.getElementById('facilidadInput').value = checkbox.checked ? 'Si' : 'No';
-    }
-    
-    // Mostrar/ocultar campos inmediatamente según el nuevo estado
-    toggleCampos();
-    
-    console.log('Facilidad cambiada a:', checkbox.checked ? 'Si' : 'No');
-}
-
-// Función para actualizar el valor del campo facprima oculto
-function updateFactorPrima(input) {
-    // Actualizar el campo oculto con el valor visible
-    var facprimaHidden = document.getElementById('facprima');
-    if (facprimaHidden) {
-        facprimaHidden.value = input.value;
-        console.log('Factor Prima actualizado:', input.value, '-> Campo oculto:', facprimaHidden.value);
-    }
-    
-    // Calcular la prima si estamos en modo facilidad
-    var facilidadCheckbox = document.getElementById('facilidad') || document.getElementById('facilidad2');
-    if (facilidadCheckbox && facilidadCheckbox.checked) {
+    if (checkbox.checked) {
+        // Si está checked
+        if(campoGtosexp) campoGtosexp.style.display = 'none';
+        
+        if(campoUdi) campoUdi.style.display = 'none';
+        if(campoUdi2) campoUdi2.style.display = 'none';
+        
+        // Mostrar todos los campos de facprima
+        campoFacprima.forEach(function(campo) {
+            if(campo) campo.style.display = '';
+        });
+        
+        if(campoCov1) campoCov1.style.display = '';
+        if(campoCov2) campoCov2.style.display = '';
+        if(campoCov3) campoCov3.style.display = '';
+        if(campoCov4) campoCov4.style.display = '';
+        
+        if(primaInput) primaInput.readOnly = true;
+        
+        // Actualizar campo oculto
+        var facilidadInput = document.getElementById('facilidadInput');
+        if(facilidadInput) facilidadInput.value = 'Si';
+        
+        var facilidadInput2 = document.getElementById('facilidadInput2');
+        if(facilidadInput2) facilidadInput2.value = 'Si';
+        
+        // Calcular prima inicial
         calcularPrima();
+    } else {
+        // Si NO está checked
+        if(campoGtosexp) campoGtosexp.style.display = '';
+        if(campoUdi) campoUdi.style.display = '';
+        if(campoUdi2) campoUdi2.style.display = '';
+        
+        // Ocultar todos los campos de facprima
+        campoFacprima.forEach(function(campo) {
+            if(campo) campo.style.display = 'none';
+        });
+        
+        if(campoCov1) campoCov1.style.display = 'none';
+        if(campoCov2) campoCov2.style.display = 'none';
+        if(campoCov3) campoCov3.style.display = 'none';
+        if(campoCov4) campoCov4.style.display = 'none';
+        
+        if(primaInput) primaInput.readOnly = false;
+        
+        // Actualizar campo oculto
+        var facilidadInput = document.getElementById('facilidadInput');
+        if(facilidadInput) facilidadInput.value = 'No';
+        
+        var facilidadInput2 = document.getElementById('facilidadInput2');
+        if(facilidadInput2) facilidadInput2.value = 'No';
     }
 }
 
-// Función para calcular la prima cuando cambia el valor de facprima
-document.addEventListener('DOMContentLoaded', function() {
-    // Agregar event listeners a todos los inputs posibles de Factor Prima
-    var facprimaInputs = [
-        document.getElementById('facprima_visible_1'),
-        document.getElementById('facprima_visible_2'),
-        document.getElementById('facprima_visible_3')
-    ];
+// Añadir el evento al checkbox
+document.getElementById('facilidad').addEventListener('change', function() {
+    var idseguro = <?php echo json_encode($idseguro); ?>;
+    var facilidad = this.checked ? 'Si' : 'No';
     
-    facprimaInputs.forEach(function(input) {
-        if (input) {
-            input.addEventListener('input', function() {
-                calcularPrima();
-            });
+    // Actualizar campos y calcular prima si es necesario
+    toggleCampos();
+    
+    // Enviar el cambio al servidor
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'actualizar_facilidad_seguro.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                console.log('Respuesta:', xhr.responseText);
+            } else {
+                console.error('Error en la solicitud');
+            }
         }
-    });
+    };
+    
+    var params = 'idseguro=' + encodeURIComponent(idseguro) + 
+                '&facilidad=' + encodeURIComponent(facilidad);
+    xhr.send(params);
 });
 
-// Función para calcular la prima
+// Reemplazar las funciones actuales de actualizar facilidad
+function toggleFacilidad(checkbox) {
+    // Este método será un simple wrapper a toggleCampos para mantener compatibilidad
+    toggleCampos();
+}
+
+// Función actualizada para calcular prima cuando cambia facprima
 function calcularPrima() {
+    console.log("Calculando prima...");
     // Obtener el valor de aseguradasiva y limpiarlo
-    var aseguradaSivaStr = document.getElementById('aseguradasiva').value;
+    var aseguradaSivaElement = document.getElementById('aseguradasiva');
+    if (!aseguradaSivaElement) {
+        console.log("No se encontró el elemento aseguradasiva");
+        return;
+    }
+    
+    var aseguradaSivaStr = aseguradaSivaElement.value;
     var aseguradaSiva = parseFloat(aseguradaSivaStr.replace(/[$,]/g, ''));
     
-    // Buscar el input de Factor Prima que esté visible y activo
+    // Buscar el facprima visible que esté activo
     var facprima = 0;
     var facprimaInputs = [
         document.getElementById('facprima_visible_1'),
@@ -1492,7 +1497,7 @@ function calcularPrima() {
         var input = facprimaInputs[i];
         if (input && input.offsetParent !== null) { // Si el input está visible
             facprima = parseFloat(input.value) || 0;
-            console.log('CÁLCULO - Factor Prima encontrado:', facprima, 'desde input:', input.id);
+            console.log('Usando facprima:', facprima, 'desde', input.id);
             break;
         }
     }
@@ -1500,171 +1505,31 @@ function calcularPrima() {
     var plazo = parseFloat(document.getElementById('plazo').value) || 0;
     var primaInput = document.getElementById('prima');
     
-    console.log('CÁLCULO - Valores para calcular:');
-    console.log('  - Asegurada Siva:', aseguradaSiva);
-    console.log('  - Factor Prima:', facprima);
-    console.log('  - Plazo:', plazo);
-    
     var gtosexpInput = document.getElementById('gtosexp');
-    
-    // NO resetear gtosexp si ya tiene un valor
-    if (!gtosexpInput.value || gtosexpInput.value === '0' || gtosexpInput.value === '') {
+    if (gtosexpInput && (!gtosexpInput.value || gtosexpInput.value === '0')) {
         gtosexpInput.value = '0';
     }
     
-    // Solo calcular prima si facprima > 0, si no, mantener el valor actual
+    // Calcular prima solo si tenemos todos los valores necesarios
     if (facprima > 0 && plazo > 0 && aseguradaSiva > 0) {
         var primaCalculada = aseguradaSiva * (facprima/1000) * (plazo/12);
-        console.log('CÁLCULO - Prima calculada:', primaCalculada);
-        console.log('CÁLCULO - Fórmula:', aseguradaSiva, '* (', facprima, '/1000) * (', plazo, '/12)');
+        console.log('Prima calculada:', primaCalculada, 'con formula:', aseguradaSiva, '*', facprima, '/1000 *', plazo, '/12');
         primaInput.value = primaCalculada.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-    // Si no hay valores para calcular, NO cambiar la prima existente
-     
-    // Llamar a calcularSeguro() después de actualizar la prima
-    if (typeof actualizarValores === 'function') {
-        actualizarValores();
-    }
-    if (typeof calcularSeguro === 'function') {
-        calcularSeguro();
-    }
-}
-
-// Función calcularDuracion para calcular la duración entre dos fechas en meses
-function calcularDuracion() {
-    const fechaInicio = document.getElementById('fechai').value;
-    const fechaVencimiento = document.getElementById('fechav').value;
-    
-    if (fechaInicio && fechaVencimiento) {
-        // Convertir las fechas a objetos Date
-        const inicio = new Date(fechaInicio);
-        const vencimiento = new Date(fechaVencimiento);
         
-        // Calcular la diferencia en meses
-        const diffAnios = vencimiento.getFullYear() - inicio.getFullYear();
-        const diffMeses = vencimiento.getMonth() - inicio.getMonth();
-        
-        // Total de meses
-        let mesesTotal = diffAnios * 12 + diffMeses;
-        
-        // Ajustar por días del mes si es necesario
-        if (vencimiento.getDate() < inicio.getDate()) {
-            mesesTotal--;
+        // Llamar a las funciones de actualización
+        if (typeof actualizarValores === 'function') {
+            actualizarValores();
         }
-        
-        // Formatear el resultado
-        let resultado = '';
-        if (mesesTotal >= 12) {
-            const anios = Math.floor(mesesTotal / 12);
-            const mesesRestantes = mesesTotal % 12;
-            
-            if (anios === 1) {
-                resultado = '1 AÑO';
-                if (mesesRestantes > 0) {
-                    resultado += ` y ${mesesRestantes} mes${mesesRestantes > 1 ? 'es' : ''}`;
-                }
-            } else {
-                resultado = `${anios} AÑOS`;
-                if (mesesRestantes > 0) {
-                    resultado += ` y ${mesesRestantes} mes${mesesRestantes > 1 ? 'es' : ''}`;
-                }
-            }
-        } else {
-            resultado = `${mesesTotal} mes${mesesTotal > 1 ? 'es' : ''}`;
-        }
-        
-        // Actualizar el campo
-        var duracionElement = document.getElementById('duracion');
-        if (duracionElement) {
-            duracionElement.value = resultado;
+        if (typeof calcularSeguro === 'function') {
+            calcularSeguro();
         }
     }
 }
 
-// Calcular duración cuando las fechas cambien
-var fechaiElement = document.getElementById('fechai');
-var fechavElement = document.getElementById('fechav');
-
-if (fechaiElement) {
-    fechaiElement.addEventListener('change', calcularDuracion);
-}
-if (fechavElement) {
-    fechavElement.addEventListener('change', calcularDuracion);
-}
-
-// Calcular duración al cargar la página
-document.addEventListener('DOMContentLoaded', calcularDuracion);
-
-// Función para actualizar el campo de cobertura
-function updateCobertura(valor) {
-    var coberturaElement = document.getElementById('cobertura');
-    if (coberturaElement) {
-        coberturaElement.value = valor;
-        console.log('Cobertura seleccionada: ' + valor);
-    }
-}
-
-// Función para inicializar el factor prima
-function initializeFactorPrima() {
-    var facprimaHidden = document.getElementById('facprima');
-    
-    // Buscar todos los inputs visibles posibles
-    var facprimaInputs = [
-        document.getElementById('facprima_visible_1'),
-        document.getElementById('facprima_visible_2'),
-        document.getElementById('facprima_visible_3')
-    ].filter(function(input) { return input !== null; });
-    
-    if (facprimaHidden && facprimaInputs.length > 0) {
-        var valorHidden = facprimaHidden.value;
-        
-        console.log('Factor Prima desde PHP:', valorHidden);
-        
-        // SOLO establecer 12 si el campo está completamente vacío o es null
-        if (!valorHidden || valorHidden === '') {
-            valorHidden = '12';
-            facprimaHidden.value = '12';
-            console.log('Usando valor default 12');
-        }
-        
-        facprimaInputs.forEach(function(facprimaVisible) {
-            // Siempre usar el valor del campo oculto para sincronización
-            facprimaVisible.value = valorHidden;
-        });
-        
-        console.log('Factor Prima inicializado:', valorHidden);
-    }
-}
-
-// Debug para el formulario antes del envío
+// Ejecutar al cargar la página
 document.addEventListener('DOMContentLoaded', function() {
-    var forms = document.querySelectorAll('form');
-    forms.forEach(function(form) {
-        form.addEventListener('submit', function(e) {
-            var facprimaHidden = document.getElementById('facprima');
-            var facilidadHidden = document.getElementById('facilidadInput') || document.getElementById('facilidadInput2');
-            
-            console.log('ENVIANDO FORMULARIO:');
-            if (facprimaHidden) {
-                console.log('  - Factor Prima (hidden):', facprimaHidden.value);
-                console.log('  - Campo facprima name:', facprimaHidden.name);
-            } else {
-                console.log('  - ERROR: Campo facprima no encontrado');
-            }
-            if (facilidadHidden) {
-                console.log('  - Facilidad:', facilidadHidden.value);
-            }
-            
-            // Mostrar todos los campos del formulario para debug
-            var formData = new FormData(form);
-            console.log('  - Todos los campos del formulario:');
-            for (var pair of formData.entries()) {
-                if (pair[0] === 'facprima' || pair[0] === 'facilidad') {
-                    console.log('    ' + pair[0] + ': ' + pair[1]);
-                }
-            }
-        });
-    });
+    console.log('DOM cargado, inicializando campos de facilidad');
+    toggleCampos();
 });
 </script>
 

@@ -42,9 +42,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         error_log("DEBUG seguro_formidX2.php - Factor Prima recibido: " . ($_POST["facprima"] ?? 'NULL'));
         error_log("DEBUG seguro_formidX2.php - Factor Prima procesado: " . ($facprima ?? 'NULL'));
         
-        // ✅ AGREGAR EL CAMPO FACILIDAD
-        $facilidad = filter_var($_POST["facilidad"], FILTER_SANITIZE_STRING);
+// Procesar el campo facilidad correctamente
+$facilidad = isset($_POST["facilidad"]) ? $_POST["facilidad"] : "No";
+// Normalizar el valor a "Si" o "No"
+$facilidad = ($facilidad === "Si") ? "Si" : "No";
 
+// Registrar para depuración
+error_log("DEBUG seguro_formidX2.php - Facilidad recibida: " . $facilidad);
+
+// Asegurarse de que facilidad siempre sea "Si" o "No"
+if ($facilidad !== "Si") {
+    $facilidad = "No";
+}
         $asegurado = $_POST["asegurado"];
         $marca = $_POST["marca"];
         $submarca = $_POST["submarca"];
@@ -63,6 +72,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fechaudi = $_POST["fechaudi"];
         $fechapcliente = $_POST["fechapcliente"];
         
+        // Obtener los valores de los campos de cobertura específicos
+        $cov1 = isset($_POST["cov1_value"]) ? filter_var($_POST["cov1_value"], FILTER_SANITIZE_STRING) : "";
+        $cov2 = isset($_POST["cov2_value"]) ? filter_var($_POST["cov2_value"], FILTER_SANITIZE_STRING) : "";
+        $cov3 = isset($_POST["cov3_value"]) ? filter_var($_POST["cov3_value"], FILTER_SANITIZE_STRING) : "";
+        $cov4 = isset($_POST["cov4_value"]) ? filter_var($_POST["cov4_value"], FILTER_SANITIZE_STRING) : "";
+        
         // ✅ AGREGAR Facilidad AL UPDATE
         $sql = "UPDATE `Seguros` SET 
             `Vigenciacot`=?, 
@@ -75,6 +90,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             `Facprima`=?, 
             `Cobertura`=?,
             `Facilidad`=?,
+            `Cov1`=?, 
+            `Cov2`=?, 
+            `Cov3`=?, 
+            `Cov4`=?,
             `Deddm`=?, 
             `Dedrt`=?, 
             `Adaptacion`=?, 
@@ -110,12 +129,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception("Error en la preparación de la consulta: " . mysqli_error($conn));
         }
 
-        // ✅ AGREGAR UN PARÁMETRO MÁS Y CAMBIAR A 38 's'
-        if (!mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssssssssssssssssssss", 
+        // ✅ AGREGAR 4 PARÁMETROS MÁS Y CAMBIAR A 42 's'
+        if (!mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssssssssssssssssssssss", 
             $vigencia, $prima, $tasaf, $gastosexp, $monto, $plazo, $udi,
-            $facprima, $cobertura, $facilidad, $deddm, $dedrt, $adaptacion, $adapmonto,
+            $facprima, $cobertura, $facilidad, 
+            $cov1, $cov2, $cov3, $cov4, 
+            $deddm, $dedrt, $adaptacion, $adapmonto,
             $deddma, $dedrta, $segfinanciado, $tiposeg, $factor, $segurom,
-            $comentario, $asegurado, $marca, $submarca, $version, $transmision, $ano, $aseguradora, $broker,$poliza,$fpoliza,$fechai,$fechav,$fechaudi,$fechapcliente,$duracion,$user,  $idseguro)) {
+            $comentario, $asegurado, $marca, $submarca, $version, $transmision, $ano, 
+            $aseguradora, $broker,$poliza,$fpoliza,$fechai,$fechav,$fechaudi,$fechapcliente,
+            $duracion,$user, $idseguro)) {
             throw new Exception("Error al vincular parámetros: " . mysqli_error($conn));
         }
 
