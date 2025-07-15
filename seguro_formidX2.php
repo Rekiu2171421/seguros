@@ -35,25 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $segurom = isset($_POST["segurom"]) ? str_replace(',', '', $_POST["segurom"]) : '';
         $segurom = is_numeric($segurom) ? floatval($segurom) : 0;
         $comentario = filter_var($_POST["comentario"], FILTER_SANITIZE_STRING);
-        $facprima = filter_var($_POST["facprima"], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+        $facprima = filter_var($_POST["facprima"], FILTER_SANITIZE_NUMBER_INT);
         $cobertura = filter_var($_POST["cobertura"], FILTER_SANITIZE_STRING);
-        
-        // DEBUG: Log de valores recibidos
-        error_log("DEBUG seguro_formidX2.php - Factor Prima recibido: " . ($_POST["facprima"] ?? 'NULL'));
-        error_log("DEBUG seguro_formidX2.php - Factor Prima procesado: " . ($facprima ?? 'NULL'));
-        
-// Procesar el campo facilidad correctamente
-$facilidad = isset($_POST["facilidad"]) ? $_POST["facilidad"] : "No";
-// Normalizar el valor a "Si" o "No"
-$facilidad = ($facilidad === "Si") ? "Si" : "No";
 
-// Registrar para depuración
-error_log("DEBUG seguro_formidX2.php - Facilidad recibida: " . $facilidad);
-
-// Asegurarse de que facilidad siempre sea "Si" o "No"
-if ($facilidad !== "Si") {
-    $facilidad = "No";
-}
         $asegurado = $_POST["asegurado"];
         $marca = $_POST["marca"];
         $submarca = $_POST["submarca"];
@@ -72,13 +56,6 @@ if ($facilidad !== "Si") {
         $fechaudi = $_POST["fechaudi"];
         $fechapcliente = $_POST["fechapcliente"];
         
-        // Obtener los valores de los campos de cobertura específicos
-        $cov1 = isset($_POST["cov1_value"]) ? filter_var($_POST["cov1_value"], FILTER_SANITIZE_STRING) : "";
-        $cov2 = isset($_POST["cov2_value"]) ? filter_var($_POST["cov2_value"], FILTER_SANITIZE_STRING) : "";
-        $cov3 = isset($_POST["cov3_value"]) ? filter_var($_POST["cov3_value"], FILTER_SANITIZE_STRING) : "";
-        $cov4 = isset($_POST["cov4_value"]) ? filter_var($_POST["cov4_value"], FILTER_SANITIZE_STRING) : "";
-        
-        // ✅ AGREGAR Facilidad AL UPDATE
         $sql = "UPDATE `Seguros` SET 
             `Vigenciacot`=?, 
             `Prima`=?, 
@@ -89,11 +66,6 @@ if ($facilidad !== "Si") {
             `Udi`=?, 
             `Facprima`=?, 
             `Cobertura`=?,
-            `Facilidad`=?,
-            `Cov1`=?, 
-            `Cov2`=?, 
-            `Cov3`=?, 
-            `Cov4`=?,
             `Deddm`=?, 
             `Dedrt`=?, 
             `Adaptacion`=?, 
@@ -129,16 +101,12 @@ if ($facilidad !== "Si") {
             throw new Exception("Error en la preparación de la consulta: " . mysqli_error($conn));
         }
 
-        // ✅ AGREGAR 4 PARÁMETROS MÁS Y CAMBIAR A 42 's'
-        if (!mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssssssssssssssssssssss", 
+        // Vincula los parámetros
+        if (!mysqli_stmt_bind_param($stmt, "sssssssssssssssssssssssssssssssssssss", 
             $vigencia, $prima, $tasaf, $gastosexp, $monto, $plazo, $udi,
-            $facprima, $cobertura, $facilidad, 
-            $cov1, $cov2, $cov3, $cov4, 
-            $deddm, $dedrt, $adaptacion, $adapmonto,
+            $facprima, $cobertura, $deddm, $dedrt, $adaptacion, $adapmonto,
             $deddma, $dedrta, $segfinanciado, $tiposeg, $factor, $segurom,
-            $comentario, $asegurado, $marca, $submarca, $version, $transmision, $ano, 
-            $aseguradora, $broker,$poliza,$fpoliza,$fechai,$fechav,$fechaudi,$fechapcliente,
-            $duracion,$user, $idseguro)) {
+            $comentario, $asegurado, $marca, $submarca, $version, $transmision, $ano, $aseguradora, $broker,$poliza,$fpoliza,$fechai,$fechav,$fechaudi,$fechapcliente,$duracion,$user,  $idseguro)) {
             throw new Exception("Error al vincular parámetros: " . mysqli_error($conn));
         }
 
@@ -156,7 +124,7 @@ if ($facilidad !== "Si") {
         mysqli_close($conn);
 
         $mensaje = urlencode("Datos Actualizados Correctamente");
-         header("Location: seguro_principalid.php?idcotfinal=$idcotfinal&idcliente=$idcliente&idcontrato=$idcontrato&mensaje=$mensaje");
+         header("Location: seguro_principalid.php?idcotfinal=$idcotfinal&idcliente=$idcliente&idcontrato=$idcontrato&error=$error");
         exit();
 
     } catch (Exception $e) {

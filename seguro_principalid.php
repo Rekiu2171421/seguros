@@ -881,27 +881,27 @@ if(isset($_GET['mensaje'])) {
    
    
    <tr>
-    <!-- Botones de cobertura que actualizan tanto el campo oculto como los valores cov1-cov4 -->
+    <!-- Botones de cobertura que solo actualizan el campo oculto -->
     <td id="campo-cov1" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo ($cobertura === 'Rotura de maquinaria' || $cov1 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
+        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo $cobertura === 'Rotura de maquinaria' ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
         <label for="cov1">Rotura de maquinaria</label>
     </td>
     
     <td id="campo-cov2" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo ($cobertura === 'Equipo Electrónico' || $cov2 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
+        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo $cobertura === 'Equipo Electrónico' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
         <label for="cov2">Equipo Electrónico</label>
     </td>
     
     <td id="campo-cov3" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo ($cobertura === 'Contenidos' || $cov3 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
+        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo $cobertura === 'Contenidos' ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
         <label for="cov3">Contenidos</label>
     </td>
     
     <td id="campo-cov4" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo ($cobertura === 'Equipo de Contratistas' || $cov4 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
+        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo $cobertura === 'Equipo de Contratistas' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
         <label for="cov4">Equipo de Contratistas</label>
     </td>
-</tr>
+   </tr>
    
    
    
@@ -917,7 +917,7 @@ if(isset($_GET['mensaje'])) {
 <select name="asegurado" style="width:98%;" required>
     <option value="" disabled <?= isset($asegurado) && $asegurado == '' ? 'selected' : '' ?>>SELECCIONAR</option>
     <option value="CLIENTE" <?= isset($asegurado) && $asegurado == 'CLIENTE' ? 'selected' : '' ?>>CLIENTE</option>
-    <option value="ACTIVE" <?= isset($asegurado) && $asegurado == 'ACTIVE' ? 'selected' : '' ?>>ACTIVE</option>
+    <option value="ACTIVELEASING" <?= isset($asegurado) && ($asegurado == 'ACTIVE' || $asegurado == 'ACTIVELEASING') ? 'selected' : '' ?>>ACTIVE</option>
 </select>
 
 </td>
@@ -1198,27 +1198,27 @@ if ($result) {
    
    
    <tr>
-    <!-- Botones de cobertura que actualizan tanto el campo oculto como los valores cov1-cov4 -->
+    <!-- Botones de cobertura que solo actualizan el campo oculto -->
     <td id="campo-cov1" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo ($cobertura === 'Rotura de maquinaria' || $cov1 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
+        <input type="radio" name="cobertura_tipo" id="cov1" value="Rotura de maquinaria" <?php echo $cobertura === 'Rotura de maquinaria' ? 'checked' : ''; ?> onchange="updateCobertura('Rotura de maquinaria');">
         <label for="cov1">Rotura de maquinaria</label>
     </td>
     
     <td id="campo-cov2" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo ($cobertura === 'Equipo Electrónico' || $cov2 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
+        <input type="radio" name="cobertura_tipo" id="cov2" value="Equipo Electrónico" <?php echo $cobertura === 'Equipo Electrónico' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo Electrónico');">
         <label for="cov2">Equipo Electrónico</label>
     </td>
     
     <td id="campo-cov3" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo ($cobertura === 'Contenidos' || $cov3 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
+        <input type="radio" name="cobertura_tipo" id="cov3" value="Contenidos" <?php echo $cobertura === 'Contenidos' ? 'checked' : ''; ?> onchange="updateCobertura('Contenidos');">
         <label for="cov3">Contenidos</label>
     </td>
     
     <td id="campo-cov4" style='border: none; text-align:left;  font-size:10px; <?php echo $facilidad === "Si" ? "" : "display: none;"; ?>'>
-        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo ($cobertura === 'Equipo de Contratistas' || $cov4 === '0') ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
+        <input type="radio" name="cobertura_tipo" id="cov4" value="Equipo de Contratistas" <?php echo $cobertura === 'Equipo de Contratistas' ? 'checked' : ''; ?> onchange="updateCobertura('Equipo de Contratistas');">
         <label for="cov4">Equipo de Contratistas</label>
     </td>
-</tr>
+   </tr>
    
    
    
@@ -1234,7 +1234,7 @@ if ($result) {
 <select name="asegurado" style="width:98%;" required>
     <option value="" disabled <?= isset($asegurado) && $asegurado == '' ? 'selected' : '' ?>>SELECCIONAR</option>
     <option value="CLIENTE" <?= isset($asegurado) && $asegurado == 'CLIENTE' ? 'selected' : '' ?>>CLIENTE</option>
-    <option value="ACTIVE" <?= isset($asegurado) && $asegurado == 'ACTIVE' ? 'selected' : '' ?>>ACTIVE</option>
+    <option value="ACTIVELEASING" <?= isset($asegurado) && ($asegurado == 'ACTIVE' || $asegurado == 'ACTIVELEASING') ? 'selected' : '' ?>>ACTIVE</option>
 </select>
 
 </td>
@@ -1297,10 +1297,9 @@ if ($result) {
 
 
     <td style="border: none; text-align:left; font-size:10px;">
-    Fecha de pago de póliza
-    <input style="width:98%; text-align:left;" type="date" name="fechapoliza" value="<?php echo isset($fechapoliza) ? $fechapoliza : ''; ?>">
-</td>
-
+                Fecha de pago de póliza
+                <input style="width:98%; text-align:left;" type="date" name="fechapoliza" value="<?php echo isset($fechapoliza) ? $fechapoliza : ''; ?>">
+            </td>
 </tr>
 
 <tr>
@@ -1512,8 +1511,9 @@ function calcularPrima() {
     
     // Calcular prima solo si tenemos todos los valores necesarios
     if (facprima > 0 && plazo > 0 && aseguradaSiva > 0) {
-        var primaCalculada = aseguradaSiva * (facprima/1000) * (plazo/12);
-        console.log('Prima calculada:', primaCalculada, 'con formula:', aseguradaSiva, '*', facprima, '/1000 *', plazo, '/12');
+        // CORRECCIÓN: Eliminada la división por 1000
+        var primaCalculada = aseguradaSiva * facprima * (plazo/12);
+        console.log('Prima calculada:', primaCalculada, 'con formula:', aseguradaSiva, '*', facprima, '*', plazo, '/12');
         primaInput.value = primaCalculada.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         
         // Llamar a las funciones de actualización
@@ -1533,6 +1533,31 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+<!-- Agrega una función para actualizar el campo de cobertura cuando se seleccionan los radio buttons -->
+<script>
+function updateCobertura(valor) {
+    document.getElementById('cobertura').value = valor;
+    document.getElementById('cobertura2').value = valor;
+}
+
+// También agregar la función updateFactorPrima para manejar los cambios en el factor prima
+function updateFactorPrima(input) {
+    var valor = input.value;
+    
+    // Actualizar todos los campos de facprima
+    var facprimaMain = document.getElementById('facprima');
+    var facprima2 = document.getElementById('facprima2');
+    
+    if(facprimaMain) facprimaMain.value = valor;
+    if(facprima2) facprima2.value = valor;
+    
+    // Recalcular prima si es necesario
+    if(document.getElementById('facilidad').checked) {
+        calcularPrima();
+    }
+}
+</script>
+
 <script>
 function confirmarEliminacion() {
     return confirm("¿Estás seguro de que deseas eliminar este documento?");
@@ -1541,21 +1566,18 @@ function confirmarEliminacion() {
 
 <script>
 function calcularUDI() {
+    // Obtener valores
     let udi = parseFloat(document.getElementById('udi').value) || 0;
-    let prima2 = parseFloat(document.getElementById('prima').value.replace(/,/g, '')) || 0;
-    let tasaf2 = parseFloat(document.getElementById('tasaf').value.replace(/,/g, '')) || 0;
-    let gtosexp2 = parseFloat(document.getElementById('gtosexp').value.replace(/,/g, '')) || 0;
-
+    let prima = parseFloat(document.getElementById('prima').value.replace(/,/g, '')) || 0;
     
-    let monto2 = prima2 - tasaf2 + gtosexp2;
+    // Cálculo de UDI base: prima * porcentaje UDI
+    let resultadoBase = prima * (udi / 100);
     
-   
-    // Calcular el resultado
-    let resultado = monto2 * udi / 100;
-
-
+    // Añadir IVA al resultado (16%)
+    let resultadoConIVA = resultadoBase * 1.16;
+    
     // Formatear el resultado con comas como separador de miles
-    document.getElementById('udimonto').value = resultado.toLocaleString('en-US', {
+    document.getElementById('udimonto').value = resultadoConIVA.toLocaleString('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });

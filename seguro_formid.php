@@ -149,7 +149,11 @@ $comentario = $rowSeg['Comentario'];
 $fecha = $rowSeg['Fecha'];
 $inicio = $rowSeg['Inicio'];
 
-$facprima = isset($rowSeg['Facprima']) ? $rowSeg['Facprima'] : 12;
+$facprima = (isset($rowSeg['Facprima']) && !empty($rowSeg['Facprima'])) ? 
+    (strpos($rowSeg['Facprima'], '.') !== false ? 
+        $rowSeg['Facprima'] : 
+        number_format((float)$rowSeg['Facprima']/1000, 3, '.', '')) : 
+    0.012;
 $cobertura = isset($rowSeg['Cobertura']) ? $rowSeg['Cobertura'] : '';
 
 $tiposeguro = $rowSeg['Tiposeguro'];
@@ -203,6 +207,8 @@ $resultado2 = $conn->query($consulta2);
                 $moneda = $datos2['Moneda']; 
                 $valorcotizado = $cantidad * $valorsiva * $tcambio;
                 $tipo =  $datos2['Tipo']; 
+                
+                $factor = $datos2['Segurofactor']; 
 
 //operaciones de seguro
 
@@ -285,7 +291,7 @@ $version = !empty($rowSeg['Version']) ? $rowSeg['Version'] : $datos3['Version'];
 <br>
 <table style="margin-left:50px; width: 95%; border: none;">
 <tr><td style='border: none; text-align:left; border-bottom: 1px solid #d2d2d2;'>
- <h2>Seguro en Activacion</h2>
+ <h2>Seguro en Activación del Contrato: <?php echo $idcontrato; ?></h2>
 </td>
 <td style='border: none; text-align:center; border-bottom: 1px solid #d2d2d2;color: green;'>
 <?php
@@ -468,7 +474,7 @@ document.getElementById('completo').addEventListener('change', function() {
 </select> 
                                                                                      <input type="hidden" name="tiposeguro" id="tiposeguro" value="<?php echo isset($tiposeguro) ? $tiposeguro : '0'; ?>" readonly>    
 </td>
-<td style='border: none; text-align:left;  font-size:10px;'>Factor de Financiamiento: <input style="width:98%;  text-align:left;" type="text" name="factor" id="factor"  value="<?php echo isset($factor) ? $factor : 1.2; ?>" class="format-number"></td>
+<td style='border: none; text-align:left;  font-size:10px;'>Factor de Financiamiento: <input style="width:98%;  text-align:left;" type="number" step="0.01" name="factor" id="factor"  value="<?php echo isset($factor) ? $factor : 1.2; ?>"></td>
 
 <td style='border: none; text-align:left;  font-size:10px;'>Monto Mensual a Pagar : <input style="width:98%;  text-align:left;" type="text" name="segurom" id="segurom" value="<?php echo isset($segurom) ? $segurom : 0; ?>" readonly></td>
 
@@ -495,7 +501,7 @@ document.getElementById('completo').addEventListener('change', function() {
 <select name="asegurado" style="width:98%;" required>
     <option value="" disabled <?= isset($asegurado) && $asegurado == '' ? 'selected' : '' ?>>SELECCIONAR</option>
     <option value="CLIENTE" <?= isset($asegurado) && $asegurado == 'CLIENTE' ? 'selected' : '' ?>>CLIENTE</option>
-    <option value="ACTIVE" <?= isset($asegurado) && $asegurado == 'ACTIVE' ? 'selected' : '' ?>>ACTIVE</option>
+    <option value="ACTIVELEASING" <?= isset($asegurado) && ($asegurado == 'ACTIVELEASING' || $asegurado == 'ACTIVE') ? 'selected' : '' ?>>ACTIVE</option>
 </select>
 
 </td>
@@ -749,15 +755,17 @@ if ($permiso == "R1eSgoS" || $permiso == "SegUros" ||  $permiso == "DiRgEn" || $
 
 <td id="campo-facprima" style='border: none; text-align:left; font-size:10px; display: none;'>
     Factor Prima: 
-    <input style="width:98%; text-align:left;" type="number" step="0.01" name="facprima" id="facprima" 
-           value="<?php echo isset($facprima) ? $facprima : ''; ?>">
+    <input style="width:98%; text-align:left;" type="text" 
+           name="facprima" id="facprima" 
+           value="<?php echo isset($facprima) ? number_format((float)$facprima, 3, '.', '') : '0.012'; ?>">
 </td>
 
 <?php } else { ?>
 
 <td id="campo-facprima" style='border: none; text-align:left; font-size:10px; display: none;'>
     Factor Prima: 
-    <input style="width:98%; text-align:left;background:#d2d2d2;" type="number" step="0.01" name="facprima" id="facprima" 
+    <input style="width:98%; text-align:left; background:#d2d2d2;" 
+           type="text" name="facprima" id="facprima" 
            value="<?php echo isset($facprima) ? $facprima : ''; ?>" readonly>
 </td>
 
@@ -804,7 +812,7 @@ if ($permiso == "R1eSgoS" || $permiso == "SegUros" ||  $permiso == "DiRgEn" || $
 </td>
 <td style='border: none; text-align:left;  font-size:10px;'>Factor de Financiamiento: <input style="width:98%;  text-align:left;" type="number" step="0.01" name="factor" id="factor"  value="<?php echo isset($factor) ? $factor : 1.2; ?>"></td>
 
-<td style='border: none; text-align:left;  font-size:10px;'>Monto Mensual a Pagar : <input style="width:98%;  text-align:left;" type="text" name="segurom" id="segurom" value="<?php echo isset($segurom) ? $segurom : 0; ?>" class="format-number"></td>
+<td style='border: none; text-align:left;  font-size:10px;'>Monto Mensual a Pagar : <input style="width:98%;  text-align:left;" type="text" name="segurom" id="segurom" value="<?php echo isset($segurom) ? $segurom : 0; ?>" readonly></td>
 
 <td style='border: none; text-align:left;  font-size:10px;'><input style="width:98%;  text-align:left;" type="hidden" step="0.01" name="seguromiva" id="seguromiva"></td>
 
@@ -937,7 +945,7 @@ document.getElementById('cov4').addEventListener('change', function() {
 <select name="asegurado" style="width:98%;" required>
     <option value="" disabled <?= isset($asegurado) && $asegurado == '' ? 'selected' : '' ?>>SELECCIONAR</option>
     <option value="CLIENTE" <?= isset($asegurado) && $asegurado == 'CLIENTE' ? 'selected' : '' ?>>CLIENTE</option>
-    <option value="ACTIVE" <?= isset($asegurado) && $asegurado == 'ACTIVE' ? 'selected' : '' ?>>ACTIVE</option>
+    <option value="ACTIVELEASING" <?= isset($asegurado) && ($asegurado == 'ACTIVELEASING' || $asegurado == 'ACTIVE') ? 'selected' : '' ?>>ACTIVE</option>
 </select>
 
 </td>
@@ -1070,18 +1078,21 @@ function calcularPrima() {
     var aseguradaSivaStr = document.getElementById('aseguradasiva').value;
     var aseguradaSiva = parseFloat(aseguradaSivaStr.replace(/[$,]/g, ''));
     
-    var facprima = parseFloat(document.getElementById('facprima').value) || 0;
+    // Obtener y limpiar el valor del factor prima
+    var facprimaStr = document.getElementById('facprima').value;
+    var facprima = parseFloat(facprimaStr.replace(/,/g, '.')) || 0.012; // Usar 0.012 como valor por defecto (1.2%)
+
     var plazo = parseFloat(document.getElementById('plazo').value) || 0;
     var primaInput = document.getElementById('prima');
     
     var gtosexpInput = document.getElementById('gtosexp');
     gtosexpInput.value = 0;
-    // Calcular la prima
-    var primaCalculada = aseguradaSiva * (facprima/1000) * (plazo/12) ;
+    
+    // Calcular la prima - multiplicar directamente por el factor decimal
+    var primaCalculada = aseguradaSiva * facprima * (plazo/12);
     
     // Establecer el valor calculado con 2 decimales
     primaInput.value = primaCalculada.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
      
     // Llamar a calcularSeguro() después de actualizar la prima
     if (typeof calcularSeguro === 'function') {
@@ -1460,13 +1471,14 @@ function calcularUDI() {
     
     let monto2 = prima2 - tasaf2 + gtosexp2;
     
-   
-    // Calcular el resultado
-    let resultado = monto2 * udi / 100;
-
+    // Calcular el resultado base
+    let resultadoBase = monto2 * udi / 100;
+    
+    // Añadir IVA al resultado (16%)
+    let resultadoConIVA = resultadoBase * 1.16;
 
     // Formatear el resultado con comas como separador de miles
-    document.getElementById('udimonto').value = resultado.toLocaleString('en-US', {
+    document.getElementById('udimonto').value = resultadoConIVA.toLocaleString('en-US', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
@@ -1480,9 +1492,6 @@ document.getElementById('udi').addEventListener('input', calcularUDI);
 </script>
 <br>
 <?php include "expediente_activacion.php"; ?>
-
-
-
 
 
 </html>
